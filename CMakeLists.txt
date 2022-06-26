@@ -1,0 +1,36 @@
+cmake_minimum_required(VERSION 3.22)
+
+find_program(CCACHE_PROGRAM ccache)
+if (CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+    set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif ()
+
+project(ProjSetMapVector)
+
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+if (MSVC)
+    add_compile_options(/permissive-)
+elseif (CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+    add_compile_options(-pedantic)
+    add_compile_options(-stdlib=libc++)
+    add_link_options(-stdlib=libc++)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(-pedantic)
+    set(CMAKE_BUILD_RPATH /opt/gcc-latest/lib64 /opt/gcc-latest/lib)
+else ()
+    # other compilers
+endif ()
+
+foreach (theStd 98 11 14 17 20 23)
+    add_executable(a${theStd} multistandard.cpp)
+    set_target_properties(a${theStd} PROPERTIES CXX_STANDARD ${theStd})
+endforeach ()
+
+add_executable(minefieldrange subtletiesrangeloop.cpp)
+set_target_properties(minefieldrange PROPERTIES CXX_STANDARD 17)
+if (0)
+    target_compile_options(minefieldrange PRIVATE -fsanitize=address,undefined)
+    target_link_options(minefieldrange PRIVATE -fsanitize=address,undefined)
+endif ()
