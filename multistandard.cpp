@@ -56,6 +56,7 @@ int main() {
         stringFib.push_back(ss.str());
     }
 #else  // C++11
+    // Short and sweet
     for (auto i: fib) stringFib.push_back(std::to_string(i));
 
     //  Equivalent to (first time around)
@@ -68,7 +69,7 @@ int main() {
             stringFib.push_back(std::to_string(i));
         }
     }
-    // Equivalent to (currently)
+    // Equivalent to (currently)  Closer to  C++17/20
     {
         auto &&r = fib;
         using std::begin;
